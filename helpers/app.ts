@@ -14,7 +14,7 @@ const downloadAndConvertVideoToMp3 = ({
       .setStartTime(startTime)
       .duration(duration)
       .on("error", (err: Error) => reject(err))
-      .on("end", () => resolve(`${filePath}/${title}.mp3`))
+      .on("end", () => resolve(`${title}.mp3`))
       .saveToFile(`${filePath}/${title}.mp3`)
   );
 

@@ -17,7 +17,7 @@ const downloadAndConvertVideoToMp3 = ({
       .setStartTime(startTime)
       .duration(duration)
       .on("error", (err) => reject(err))
-      .on("end", () => resolve(`${filePath}/${title}.mp3`))
+      .on("end", () => resolve(`${title}.mp3`))
       .saveToFile(`${filePath}/${title}.mp3`)
   );
 
@@ -35,5 +35,3 @@ export const process = (path) => (url, params) =>
       };
     })
     .then(downloadAndConvertVideoToMp3);
-
-process()("https://www.youtube.com/watch?v=jPYh0TIVAvM", {});
