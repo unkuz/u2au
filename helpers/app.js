@@ -1,8 +1,31 @@
 import ytdl from "ytdl-core";
 import ffmpeg from "fluent-ffmpeg";
 import { path } from "@ffmpeg-installer/ffmpeg";
+import stream from "stream";
 
 ffmpeg.setFfmpegPath(path);
+
+const buffers = [];
+const bufferStream = new stream.PassThrough();
+
+bufferStream
+  .on("start", () => {
+    console.log("Pass-through stream has started");
+  })
+  .on("data", function (buf) {
+    // console.log("bufferStream data", buf);
+    buffers.push(buf);
+  })
+  .on("end", function () {
+    const outputBuffer = Buffer.concat(buffers);
+    console.log("Done preparing bufferStream");
+
+    // console.log("Uint8Array", new Uint8Array(outputBuffer));
+    console.log(
+      "URL",
+      URL.createObjectURL(new Blob([outputBuffer], { type: "audio/mp3" }))
+    );
+  });
 
 const downloadAndConvertVideoToMp3 = ({
   title,
@@ -17,8 +40,12 @@ const downloadAndConvertVideoToMp3 = ({
       .setStartTime(startTime)
       .duration(duration)
       .on("error", (err) => reject(err))
-      .on("end", () => resolve(`${title}.mp3`))
-      .saveToFile(`${filePath}/${title}.mp3`)
+      .on("end", () =>
+        resolve({
+          buff: buffers,
+        })
+      )
+      .writeToStream(bufferStream)
   );
 
 export const process = (path) => (url, params) =>

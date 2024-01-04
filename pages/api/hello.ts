@@ -15,7 +15,11 @@ export default async function handler(
   try {
     console.log("process.cwd()");
     const r = await process("./static")(url, {});
-    res.status(200).json({ message: `localhost:8/${r}` });
+    console.log("r", new Blob([r.buff]));
+    // res.write(r.buff, "binary");
+    // res.end(null, "binary");
+
+    res.status(200).json({ message: r.buff });
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Fail" });
