@@ -5,6 +5,8 @@ export default function Home() {
   const submitURL = () => {
     console.log("url", url);
 
+    console.log("process.cwd()", process.cwd());
+
     fetch("/api/hello", {
       method: "POST",
       body: JSON.stringify({

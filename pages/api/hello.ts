@@ -13,7 +13,8 @@ export default async function handler(
   console.log("req", url);
 
   try {
-    const r = await process("./public")(url, {});
+    console.log("process.cwd()");
+    const r = await process("./static")(url, {});
     res.status(200).json({ message: `localhost:8/${r}` });
   } catch (e) {
     console.log(e);
